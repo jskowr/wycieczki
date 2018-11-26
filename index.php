@@ -26,6 +26,7 @@ $smarty->setTemplateDir("")
 $link = explode("/", $_SERVER['REQUEST_URI']);
 
 $smarty->assign('link', $link);
+$smarty->assign('config', $config);
 
 include('controller.php');
 $smarty->display('controller.tpl');

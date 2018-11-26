@@ -68,5 +68,26 @@ class Core
         }
     }
 
+    function addClass($symbol){
+
+        try {
+            $sql = "
+				INSERT INTO 
+					`klasy`
+				SET    
+				`symbol` = :symbol                              
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':symbol', $symbol, PDO::PARAM_STR);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+        }
+
+    }
+
 
 }
