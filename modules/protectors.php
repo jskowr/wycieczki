@@ -1,7 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jskow
- * Date: 26.11.2018
- * Time: 02:34
- */
+
+switch($link[2]) {
+
+    case 'add':
+        if($_POST['action'] == 'add'){
+        }
+
+        break;
+
+    default:
+        $protectors = $core->getAllProtectors();
+        $smarty->assign('protectors', $protectors);
+
+        break;
+}

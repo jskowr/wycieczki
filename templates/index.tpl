@@ -1,1 +1,1 @@
-<h1 style="text-align: center;">Wycieczki - projekt ISBD</h1>
+<h1 style="text-align: center;">Wycieczki - projekt ISBD (Strona startowa)</h1>

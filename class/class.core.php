@@ -40,6 +40,12 @@ class Core
 
     #db functions
 
+    ###############
+    ########
+    ###############
+
+    #class
+
     function getAllClasses()
     {
 
@@ -89,5 +95,200 @@ class Core
 
     }
 
+    #place
+
+    function getAllPlaces()
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`miejsca`
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    function addPlace($nazwa, $adres, $id_miejscowosci){
+
+        try {
+            $sql = "
+				INSERT INTO 
+					`miejsca`
+				SET    
+				  `nazwa` = :nazwa,
+					`adres` = :adres,
+					`id_miejscowosci` = :id_miejscowosci                           
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':nazwa', $nazwa, PDO::PARAM_STR);
+            $stmt->bindValue(':adres', $adres, PDO::PARAM_STR);
+            $stmt->bindValue(':id_miejscowosci', $id_miejscowosci, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+        }
+
+    }
+
+    #city
+
+    function getAllCities()
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`miejscowosci`
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    function addCity($nazwa){
+
+        try {
+            $sql = "
+				INSERT INTO 
+					`miejscowosci`
+				SET    
+				`nazwa` = :nazwa                              
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':nazwa', $nazwa, PDO::PARAM_STR);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+        }
+
+    }
+
+    #wycieczki
+
+    function getAllTrips()
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`wycieczki`
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    #protectors
+
+    function getAllProtectors()
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`opiekunowie`
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    #guides
+
+    function getAllGuides()
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`przewodnicy`
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
 
 }

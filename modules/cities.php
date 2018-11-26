@@ -1,7 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jskow
- * Date: 26.11.2018
- * Time: 02:34
- */
+
+switch($link[2]) {
+
+    case 'add':
+        if($_POST['action'] == 'add'){
+            $core -> addCity($_POST['nazwa']);
+        }
+
+        break;
+
+    default:
+        $cities = $core->getAllCities();
+        $smarty->assign('cities', $cities);
+
+        break;
+}
