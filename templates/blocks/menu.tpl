@@ -12,7 +12,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" style="margin-left: auto;">
-                <li style="padding-bottom: 0px;"><a href="{$config.url}/">Strona główna</a></li>
+                <li style="padding-bottom: 0px;"><a href="{$config.url}">Strona główna</a></li>
                 <li style="padding-bottom: 0px;"><a href="{$config.url}account">Konto</a></li>
                 <li style="padding-bottom: 0px;"><a href="{$config.url}classess">Klasy</a></li>
                 <li style="padding-bottom: 0px;"><a href="{$config.url}places">Miejsca</a></li>

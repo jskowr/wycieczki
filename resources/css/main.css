@@ -29,6 +29,15 @@ th, td{
     background-color: lightgreen;
 }
 
+tr:hover{
+    background-color: #3e8f3e;
+}
+
+th{
+    background-color: #5e5e5e;
+    color: #eeeeee;
+}
+
 .footer-spacer {
     width: 90%;
     margin: 20px auto;
@@ -60,4 +69,41 @@ th, td{
     border-radius: 5px;
     padding: 7px;
     border: 1px dotted #3c3c3c;
+}
+
+.inputElement{
+    border: 1px solid black;
+    padding: 3px;
+    margin-left: 15px;
+}
+
+.inputElement:hover{
+    border: 1px solid #2aabd2;
+}
+
+.submitButton{
+    padding: 5px;
+    border-radius: 5px;
+    color: #eeeeee;
+    background-color: #2a6496;
+}
+
+.submitButton:hover{
+    background-color: #5bc0de;
+}
+
+.err {
+    border: none;
+    background-color: #ffecec;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.ok {
+    border: none;
+    background-color: #defce0;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 15px;
 }

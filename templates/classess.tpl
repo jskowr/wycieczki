@@ -1,10 +1,17 @@
 <h2>Klasy</h2>
 
-
-{if $link.2 == 'add'}
-    <form>
-        <label class="elementLabel">Symbol Klasy: </label> <input type="text">
-        <br>
+{if $link.2 == 'del'}
+<form action="" method="POST" id="del">
+    <input type="checkbox" name="confirm"> &nbsp;Potwiedź usunięcie...<br><br>
+    <input type="hidden" name="action" value="del"/>
+    <input type="submit" value="Usuń"/>
+</form>
+{elseif $link.2 == 'add'}
+    <h3>Wypełnij pola:</h3><br><br>
+    <form action="" method="post" id="add">
+        <label class="elementLabel">Symbol Klasy: </label> <input name="symbol" style="width: 100px;" class="inputElement" type="text" required>
+        <br><br>
+        <input type="hidden" name="action" value="add">
         <input class="submitButton" type="submit" value="Dodaj">
     </form>
 {else}
@@ -13,6 +20,9 @@
 
 {if $classess}
 <table class="tableList">
+    {if $smarty.session.msg.m1.title}
+        <div class="{if $smarty.session.msg.m1.err}err{else}ok{/if}">{$smarty.session.msg.m1.title}</div>
+    {/if}
     <tr><th>Nr</th><th>Symbol</th><th>Opcje</th>
     {assign var='i' value=1}
     {foreach from=$classess item=v key=k}

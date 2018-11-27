@@ -89,10 +89,32 @@ class Core
             $stmt->execute();
             $stmt->closeCursor();
             unset($stmt);
+            return true;
         } catch (PDOException $e) {
             DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
         }
 
+    }
+
+    function deleteClass($id)
+    {
+        try {
+            $sql = "
+				DELETE FROM 
+					`klasy`
+				WHERE
+					`id` = :id
+				LIMIT 1;
+				";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+        }
     }
 
     #place

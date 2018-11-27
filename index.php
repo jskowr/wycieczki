@@ -1,6 +1,7 @@
 <?php
 
 include('config/database.php');
+include('config/config.php');
 include('class/class.core.php');
 
 $core = new Core();
@@ -30,3 +31,5 @@ $smarty->assign('config', $config);
 
 include('controller.php');
 $smarty->display('controller.tpl');
+
+unset($_SESSION['msg']);
