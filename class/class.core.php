@@ -125,10 +125,9 @@ class Core
         try {
 
             $sql = "
-				SELECT
-					*
-				FROM
-					`miejsca`
+            SELECT 
+                miejsca.id, miejsca.nazwa, miejsca.adres, miejscowosci.nazwa AS miejscowosc
+            FROM miejsca LEFT JOIN miejscowosci ON miejsca.id_miejscowosci= miejscowosci.id;
 				";
 
             $stmt = $this->db->prepare($sql);
@@ -231,10 +230,10 @@ class Core
         try {
 
             $sql = "
-				SELECT
-					*
-				FROM
-					`wycieczki`
+            SELECT
+            wycieczki.id, wycieczki.nazwa, wycieczki.data_rozpoczecia, wycieczki.data_zakonczenia, wycieczki.data_zakonczenia,
+            wycieczki.liczba_uczniow, miejscowosci.nazwa AS miejscowosc
+            FROM wycieczki LEFT JOIN miejscowosci ON wycieczki.id_miejscowosci = miejscowosci.id;
 				";
 
             $stmt = $this->db->prepare($sql);
@@ -261,11 +260,13 @@ class Core
         try {
 
             $sql = "
-				SELECT
-					*
-				FROM
-					`opiekunowie`
-				";
+            SELECT
+                opiekunowie.id, opiekunowie.nazwisko, opiekunowie.imie, opiekunowie.adres,
+                miejscowosci.nazwa as miejscowosc, opiekunowie.kod_pocztowy, opiekunowie.pesel,
+                opiekunowie.telefon, opiekunowie.email 
+            FROM 
+                opiekunowie LEFT JOIN miejscowosci ON opiekunowie.id_miejscowosci=miejscowosci.id;
+			";
 
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
@@ -283,6 +284,39 @@ class Core
         }
     }
 
+    function addProtector($nazwisko, $imie, $adres, $kod, $pesel, $telefon, $email){
+
+        try {
+            $sql = "
+				INSERT INTO 
+					`opiekunowie`
+				SET    
+                `nazwisko` = :nazwisko,
+                `imie` = :imie,
+                `adres` = :adres,
+                `kod_pocztowy` = :kod,
+                `pesel` = :pesel,
+                `telefon` = :telefon,
+                `email` = :email,                             
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':nazwisko', $nazwisko, PDO::PARAM_STR);
+            $stmt->bindValue(':imie', $imie, PDO::PARAM_STR);
+            $stmt->bindValue(':adres', $adres, PDO::PARAM_STR);
+            $stmt->bindValue(':kod', $kod, PDO::PARAM_STR);
+            $stmt->bindValue(':pesel', $pesel, PDO::PARAM_STR);
+            $stmt->bindValue(':telefon', $telefon, PDO::PARAM_INT);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+        }
+
+    }
+
     #guides
 
     function getAllGuides()
@@ -291,10 +325,12 @@ class Core
         try {
 
             $sql = "
-				SELECT
-					*
-				FROM
-					`przewodnicy`
+                SELECT
+                przewodnicy.id, przewodnicy.nazwisko, przewodnicy.imie, przewodnicy.adres,
+                miejscowosci.nazwa as miejscowosc, przewodnicy.kod_pocztowy, przewodnicy.pesel,
+                przewodnicy.telefon, przewodnicy.email 
+                FROM
+                przewodnicy LEFT JOIN miejscowosci ON przewodnicy.id_miejscowosci=miejscowosci.id
 				";
 
             $stmt = $this->db->prepare($sql);
