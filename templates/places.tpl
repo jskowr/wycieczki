@@ -8,14 +8,14 @@
 
     {if $places}
         <table class="tableList">
-            <tr><th>Nr</th><th>Nazwa</th><th>Adres</th><th>ID miejscowości</th><th>Opcje</th>
+            <tr><th>Nr</th><th>Nazwa</th><th>Adres</th><th>Miejscowość</th><th>Opcje</th>
                 {assign var='i' value=1}
                 {foreach from=$places item=v key=k}
             <tr>
                 <td>{$i}</td>
                 <td>{$v.nazwa}</td>
                 <td>{$v.adres}</td>
-                <td>{$v.id_miejscowosci}</td>
+                <td>{$v.miejscowosc}</td>
                 <td>
                     <a href="{$config.url}{$link.1}/edit/{$v.id}" title="edytuj"><img
                                 src="{$config.url}resources/images/edit.png" alt="edytuj"/></a>

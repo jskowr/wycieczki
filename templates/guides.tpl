@@ -9,7 +9,7 @@
     {if $guides}
         <div style="overflow-x: auto;">
             <table class="tableList">
-                <tr><th>Nr</th><th>Nazwisko</th><th>Imię</th><th>Adres</th><th>Kod pocztowy</th><th>PESEL</th><th>Telefon</th><th>E-mail</th><th>ID miejscowości</th><th>Opcje</th>
+                <tr><th>Nr</th><th>Nazwisko</th><th>Imię</th><th>Adres</th><th>Miejscowość</th><th>Kod pocztowy</th><th>PESEL</th><th>Telefon</th><th>E-mail</th><th>Opcje</th>
                     {assign var='i' value=1}
                     {foreach from=$guides item=v key=k}
                 <tr>
@@ -17,11 +17,11 @@
                     <td>{$v.nazwisko}</td>
                     <td>{$v.imie}</td>
                     <td>{$v.adres}</td>
+                    <td>{$v.miejscowosc}</td>
                     <td>{$v.kod_pocztowy}</td>
                     <td>{$v.pesel}</td>
                     <td>{$v.telefon}</td>
                     <td>{$v.email}</td>
-                    <td>{$v.id_miejscowosci}</td>
                     <td>
                         <a href="{$config.url}{$link.1}/edit/{$v.id}" title="edytuj"><img
                                     src="{$config.url}resources/images/edit.png" alt="edytuj"/></a>
