@@ -1,9 +1,65 @@
 <h2>Miejsca</h2>
 
+{if $smarty.session.msg.m1.title}
+    <div class="{if $smarty.session.msg.m1.err}err{else}ok{/if}">{$smarty.session.msg.m1.title}</div> <br><br>
+{/if}
 
-{if $link.2 == 'add'}
+{if $link[2] == 'edit'}
+<form class="smallCenter" id="edit" action="" method="POST">
+
+    <label class="elementLabel">Nazwa: </label> <input value="{$smarty.post.nazwa}" name="nazwa" class="inputElement" type="text" required> <br><br>
+    <label class="elementLabel">Adres: </label> <input value="{$smarty.post.adres}" name="adres" class="inputElement" type="text" required> <br><br>
+    <label class="elementLabel">Miejscowość: </label>
+    <select name="id_miejscowosci">
+        <option value="0">Wybierz miejscowość...</option>
+        {if $cities}
+            {foreach from=$cities key=k item=v}
+                <option value="{$v.id}" {if $smarty.post.id_miejscowosci == $v.id}selected="selected"{/if}>{$v.nazwa}</option>
+            {/foreach}
+        {/if}
+    </select>
+    <br><br>
+
+    <input type="hidden" name="action" value="edit"/>
+
+    <input type="submit" name="edit" value="Zapisz"/><br><br>
+
+</form>
+{elseif $link.2 == 'del'}
+<form action="" method="POST" id="del">
+    <input type="checkbox" name="confirm"> &nbsp;Potwiedź usunięcie...<br><br>
+    <input type="hidden" name="action" value="del"/>
+    <input type="submit" value="Usuń"/>
+</form>
+{elseif $link.2 == 'add'}
+    <h3>Wypełnij pola:</h3><br><br>
+    <form action="" method="post" id="add">
+        <label class="elementLabel">Nazwa: </label> <input name="name" class="inputElement" type="text" required> <br><br>
+        <label class="elementLabel">Adres: </label> <input name="address" class="inputElement" type="text" required> <br><br>
+        <label class="elementLabel">Miejscowość: </label>
+        <select name="city">
+            <option value="0">Wybierz miejscowość...</option>
+            {if $cities}
+                {foreach from=$cities key=k item=v}
+                    <option value="{$v.id}">{$v.nazwa}</option>
+                {/foreach}
+            {/if}
+        </select>
+        <br><br>
+        <input type="hidden" name="action" value="add">
+        <input class="submitButton" type="submit" value="Dodaj">
+    </form>
 {else}
     <a href="{$config.url}{$link.1}/add"><div class="addElement">Dodaj miejsce</div></a>
+    <br><br>
+    Sortowanie po:
+    <form action="" method="post">
+        <input type="radio" name="sort" value="2" {if $smarty.post.sort == 2}checked="checked"{/if}> Nazwa<br>
+        <input type="radio" name="sort" value="3" {if $smarty.post.sort == 3}checked="checked"{/if}> Adres<br>
+        <input type="radio" name="sort" value="4" {if $smarty.post.sort == 4}checked="checked"{/if}> Miejscowość <br><br>
+        <input type="hidden" name="action" value="sort">
+        <input type="submit" value="sortuj">
+    </form>
     <br><br>
 
     {if $places}

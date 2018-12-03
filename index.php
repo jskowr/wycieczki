@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+define('DEBUG', true);
+
 include('config/database.php');
 include('config/config.php');
 include('class/class.core.php');

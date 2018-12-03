@@ -56,6 +56,7 @@ class Core
 					*
 				FROM
 					`klasy`
+				ORDER BY `symbol` ASC	
 				";
 
             $stmt = $this->db->prepare($sql);
@@ -65,6 +66,32 @@ class Core
                 $retval[$result['id']] = $result;
 
             }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    function getClassById($id)
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`klasy`
+				WHERE `id` = :id	
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $retval = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             return $retval;
@@ -91,9 +118,46 @@ class Core
             unset($stmt);
             return true;
         } catch (PDOException $e) {
-            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            if ($e->getCode() == 23000) {
+                $_SESSION['msg']['m1']['title'] = "Podany symbol klasy już istnieje.";
+                $_SESSION['msg']['m1']['err'] = true;
+                return false;
+            } else {
+                DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            }
         }
 
+    }
+
+    function updateClass($id, $symbol)
+    {
+        try {
+            $sql = "
+				UPDATE
+					`klasy`
+				SET 
+                    `symbol` = :symbol
+				WHERE 
+					`id` = :id
+				LIMIT 1;
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':symbol', $symbol, PDO::PARAM_STR);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $_SESSION['msg']['m1']['title'] = "Podany symbol klasy już istnieje.";
+                $_SESSION['msg']['m1']['err'] = true;
+                return false;
+            } else {
+                DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            }
+        }
     }
 
     function deleteClass($id)
@@ -119,15 +183,35 @@ class Core
 
     #place
 
-    function getAllPlaces()
+    function getAllPlaces($sort = null)
     {
+        $cond = "";
+
+        if($sort){
+            switch($sort){
+                case 2:
+                    $cond = " ORDER BY miejsca.nazwa";
+                    break;
+                case 3:
+                    $cond = " ORDER BY miejsca.adres";
+                    break;
+                case 4:
+                    $cond = " ORDER BY `miejscowosc`";
+                    break;
+                default:
+                    $cond = " ORDER BY `miejsca.id`";
+                    break;
+            }
+        }
 
         try {
 
             $sql = "
             SELECT 
                 miejsca.id, miejsca.nazwa, miejsca.adres, miejscowosci.nazwa AS miejscowosc
-            FROM miejsca LEFT JOIN miejscowosci ON miejsca.id_miejscowosci= miejscowosci.id;
+            FROM miejsca LEFT JOIN miejscowosci ON miejsca.id_miejscowosci= miejscowosci.id
+            $cond
+            ;
 				";
 
             $stmt = $this->db->prepare($sql);
@@ -137,6 +221,32 @@ class Core
                 $retval[$result['id']] = $result;
 
             }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    function getPlaceById($id)
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`miejsca`
+				WHERE `id` = :id	
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $retval = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             return $retval;
@@ -165,10 +275,73 @@ class Core
             $stmt->execute();
             $stmt->closeCursor();
             unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $_SESSION['msg']['m1']['title'] = "Podana nazwa miasta już istnieje.";
+                $_SESSION['msg']['m1']['err'] = true;
+                return false;
+            } else {
+                DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            }
+        }
+
+    }
+
+    function updatePlace($id, $name, $address, $city)
+    {
+        try {
+            $sql = "
+				UPDATE
+					`miejsca`
+				SET 
+                    `nazwa` = :name,
+                    `adres` = :address,
+                    `id_miejscowosci` = :city
+				WHERE 
+					`id` = :id
+				LIMIT 1;
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+            $stmt->bindValue(':address', $address, PDO::PARAM_STR);
+            $stmt->bindValue(':city', $city, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $_SESSION['msg']['m1']['title'] = "Podana nazwa miejsca już istnieje.";
+                $_SESSION['msg']['m1']['err'] = true;
+                return false;
+            } else {
+                DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            }
+        }
+    }
+
+    function deletePlace($id)
+    {
+        try {
+            $sql = "
+				DELETE FROM 
+					`miejsca`
+				WHERE
+					`id` = :id
+				LIMIT 1;
+				";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
         } catch (PDOException $e) {
             DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
         }
-
     }
 
     #city
@@ -183,6 +356,7 @@ class Core
 					*
 				FROM
 					`miejscowosci`
+					ORDER BY `nazwa` ASC	
 				";
 
             $stmt = $this->db->prepare($sql);
@@ -216,10 +390,95 @@ class Core
             $stmt->execute();
             $stmt->closeCursor();
             unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $_SESSION['msg']['m1']['title'] = "Podana nazwa miasta już istnieje.";
+                $_SESSION['msg']['m1']['err'] = true;
+                return false;
+            } else {
+                DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            }
+        }
+
+    }
+
+    function updateCity($id, $nazwa)
+    {
+        try {
+            $sql = "
+				UPDATE
+					`miejscowosci`
+				SET 
+                    `nazwa` = :nazwa
+				WHERE 
+					`id` = :id
+				LIMIT 1;
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':nazwa', $nazwa, PDO::PARAM_STR);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $_SESSION['msg']['m1']['title'] = "Podana nazwa miasta już istnieje.";
+                $_SESSION['msg']['m1']['err'] = true;
+                return false;
+            } else {
+                DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+            }
+        }
+    }
+
+    function getCityById($id)
+    {
+
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`miejscowosci`
+				WHERE `id` = :id	
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $retval = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    function deleteCity($id)
+    {
+        try {
+            $sql = "
+				DELETE FROM 
+					`miejscowosci`
+				WHERE
+					`id` = :id
+				LIMIT 1;
+				";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
         } catch (PDOException $e) {
             DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
         }
-
     }
 
     #wycieczki
@@ -284,7 +543,32 @@ class Core
         }
     }
 
-    function addProtector($nazwisko, $imie, $adres, $kod, $pesel, $telefon, $email){
+    function addProtector($nazwisko, $imie, $adres, $kod, $pesel, $telefon, $email, $id_miejscowosci){
+
+        if(!preg_match('/^[0-9]{11}$/D', $pesel)){
+            $_SESSION['msg']['m1']['title'] = "Błędny pesel.";
+            $_SESSION['msg']['m1']['err'] = true;
+            return false;
+        }
+
+        if(!preg_match('/^[0-9]{9}$/D', $telefon)){
+            $_SESSION['msg']['m1']['title'] = "Błędny telefon.";
+            $_SESSION['msg']['m1']['err'] = true;
+            return false;
+        }
+
+        if(!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i", $email)){
+            $_SESSION['msg']['m1']['title'] = "Błędny adres e-mail.";
+            $_SESSION['msg']['m1']['err'] = true;
+            return false;
+        }
+
+        if(!preg_match("/^([0-9]{2})(-[0-9]{3})?$/i", $kod)){
+            $_SESSION['msg']['m1']['title'] = "Błędny kod pocztowy.";
+            $_SESSION['msg']['m1']['err'] = true;
+            return false;
+        }
+
 
         try {
             $sql = "
@@ -297,7 +581,8 @@ class Core
                 `kod_pocztowy` = :kod,
                 `pesel` = :pesel,
                 `telefon` = :telefon,
-                `email` = :email,                             
+                `email` = :email,
+                `id_miejscowosci` = :id_miejscowosci                             
 				";
 
             $stmt = $this->db->prepare($sql);
@@ -308,13 +593,36 @@ class Core
             $stmt->bindValue(':pesel', $pesel, PDO::PARAM_STR);
             $stmt->bindValue(':telefon', $telefon, PDO::PARAM_INT);
             $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->bindValue(':id_miejscowosci', $id_miejscowosci, PDO::PARAM_INT);
             $stmt->execute();
             $stmt->closeCursor();
             unset($stmt);
+            return true;
         } catch (PDOException $e) {
             DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
         }
 
+    }
+
+    function deleteProtector($id)
+    {
+        try {
+            $sql = "
+				DELETE FROM 
+					`opiekunowie`
+				WHERE
+					`id` = :id
+				LIMIT 1;
+				";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
+            unset($stmt);
+            return true;
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die();
+        }
     }
 
     #guides

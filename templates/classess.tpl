@@ -1,6 +1,20 @@
 <h2>Klasy</h2>
 
-{if $link.2 == 'del'}
+{if $smarty.session.msg.m1.title}
+    <div class="{if $smarty.session.msg.m1.err}err{else}ok{/if}">{$smarty.session.msg.m1.title}</div> <br><br>
+{/if}
+
+{if $link[2] == 'edit'}
+<form class="smallCenter" id="edit" action="" method="POST">
+
+    Symbol: <input value="{$smarty.post.symbol}" name="symbol" type="text" required><br><br>
+
+    <input type="hidden" name="action" value="edit"/>
+
+    <input type="submit" name="edit" value="Zapisz"/><br><br>
+
+</form>
+{elseif $link.2 == 'del'}
 <form action="" method="POST" id="del">
     <input type="checkbox" name="confirm"> &nbsp;Potwiedź usunięcie...<br><br>
     <input type="hidden" name="action" value="del"/>
@@ -15,14 +29,12 @@
         <input class="submitButton" type="submit" value="Dodaj">
     </form>
 {else}
+
 <a href="{$config.url}{$link.1}/add"><div class="addElement">Dodaj klasę</div></a>
 <br><br>
 
 {if $classess}
 <table class="tableList">
-    {if $smarty.session.msg.m1.title}
-        <div class="{if $smarty.session.msg.m1.err}err{else}ok{/if}">{$smarty.session.msg.m1.title}</div>
-    {/if}
     <tr><th>Nr</th><th>Symbol</th><th>Opcje</th>
     {assign var='i' value=1}
     {foreach from=$classess item=v key=k}
