@@ -51,20 +51,19 @@
     </form>
 {else}
     <a href="{$config.url}{$link.1}/add"><div class="addElement">Dodaj miejsce</div></a>
-    <br><br>
-    Sortowanie po:
-    <form action="" method="post">
-        <input type="radio" name="sort" value="2" {if $smarty.post.sort == 2}checked="checked"{/if}> Nazwa<br>
-        <input type="radio" name="sort" value="3" {if $smarty.post.sort == 3}checked="checked"{/if}> Adres<br>
-        <input type="radio" name="sort" value="4" {if $smarty.post.sort == 4}checked="checked"{/if}> Miejscowość <br><br>
-        <input type="hidden" name="action" value="sort">
-        <input type="submit" value="sortuj">
-    </form>
-    <br><br>
-
+    
     {if $places}
-        <table class="tableList">
-            <tr><th>Nr</th><th>Nazwa</th><th>Adres</th><th>Miejscowość</th><th>Opcje</th>
+        <div class="table-responsive">
+        <table id="places" class="table">
+            <thead>
+            <tr>
+            <th>Nr</th>
+            <th>Nazwa</th>
+            <th>Adres</th>
+            <th>Miejscowość</th>
+            <th>Opcje</th>
+            </tr>
+            </thead>
                 {assign var='i' value=1}
                 {foreach from=$places item=v key=k}
             <tr>
@@ -83,7 +82,12 @@
             {assign var='i' value=$i+1}
             {/foreach}
         </table>
-
+        </div>
+        <script>
+        $(document).ready(function(){
+            $('#places').DataTable();
+        })
+        </script>
     {else}
 
     {/if}

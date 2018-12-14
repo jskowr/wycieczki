@@ -34,8 +34,15 @@
 <br><br>
 
 {if $classess}
-<table class="tableList">
-    <tr><th>Nr</th><th>Symbol</th><th>Opcje</th>
+<div class="table-responsive">
+<table id="classes" class="table">
+    <thead>
+    <tr>
+    <th>Nr</th>
+    <th>Symbol</th>
+    <th>Opcje</th>
+    </tr>
+    </thead>
     {assign var='i' value=1}
     {foreach from=$classess item=v key=k}
             <tr>
@@ -52,7 +59,12 @@
         {assign var='i' value=$i+1}
     {/foreach}
 </table>
-
+</div>
+<script>
+        $(document).ready(function(){
+            $('#classes').DataTable();
+        })
+        </script>
 {else}
 
 {/if}

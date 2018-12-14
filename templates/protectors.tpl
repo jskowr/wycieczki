@@ -77,9 +77,22 @@
     <br><br>
 
     {if $protectors}
-        <div style="overflow-x: auto;">
-        <table class="tableList">
-            <tr><th>Nr</th><th>Nazwisko</th><th>Imię</th><th>Adres</th><th>Miejscowość</th><th>Kod pocztowy</th><th>PESEL</th><th>Telefon</th><th>E-mail</th><th>Opcje</th>
+        <div class="table-responsive" style="overflow-x: auto;">
+        <table id="protectors" class="table">
+            <thead>
+            <tr>
+            <th data-field="id">Nr</th>
+            <th data-field="surname">Nazwisko</th>
+            <th data-field="name">Imię</th>
+            <th data-field="adress">Adres</th>
+            <th data-field="city">Miejscowość</th>
+            <th data-field="postcode">Kod pocztowy</th>
+            <th data-field="pesel">PESEL</th>
+            <th data-field="phone">Telefon</th>
+            <th data-field="email">E-mail</th>
+            <th>Opcje</th>
+            </tr>
+            </thead>
                 {assign var='i' value=1}
                 {foreach from=$protectors item=v key=k}
             <tr>
@@ -104,6 +117,11 @@
             {/foreach}
         </table>
         </div>
+        <script>
+        $(document).ready(function(){
+            $('#protectors').DataTable();
+        })
+        </script>
 
     {else}
 

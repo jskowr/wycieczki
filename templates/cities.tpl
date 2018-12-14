@@ -33,8 +33,15 @@
     <br><br>
 
     {if $cities}
-        <table class="tableList">
-            <tr><th>Nr</th><th>Nazwa</th><th>Opcje</th>
+        <div class="table-responsive">
+        <table id="cities" class="table">
+            <thead>
+            <tr>
+            <th data-field="id">Nr</th>
+            <th data-field="name">Nazwa</th>
+            <th >Opcje</th>
+            </tr>
+            </thead>
                 {assign var='i' value=1}
                 {foreach from=$cities item=v key=k}
             <tr>
@@ -51,7 +58,12 @@
             {assign var='i' value=$i+1}
             {/foreach}
         </table>
-
+        </div>
+        <script>
+        $(document).ready(function(){
+            $('#cities').DataTable();
+        })
+        </script>
     {else}
 
     {/if}

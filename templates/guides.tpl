@@ -7,9 +7,22 @@
     <br><br>
 
     {if $guides}
-        <div style="overflow-x: auto;">
-            <table class="tableList">
-                <tr><th>Nr</th><th>Nazwisko</th><th>Imię</th><th>Adres</th><th>Miejscowość</th><th>Kod pocztowy</th><th>PESEL</th><th>Telefon</th><th>E-mail</th><th>Opcje</th>
+        <div class="table-responsive" style="overflow-x: auto;">
+            <table id="guides" class="table">
+                <thead>
+                <tr>
+                <th>Nr</th>
+                <th>Nazwisko</th>
+                <th>Imię</th>
+                <th>Adres</th>
+                <th>Miejscowość</th>
+                <th>Kod pocztowy</th>
+                <th>PESEL</th>
+                <th>Telefon</th>
+                <th>E-mail</th>
+                <th>Opcje</th>
+                </tr>
+                </thead>
                     {assign var='i' value=1}
                     {foreach from=$guides item=v key=k}
                 <tr>
@@ -34,7 +47,11 @@
                 {/foreach}
             </table>
         </div>
-
+        <script>
+        $(document).ready(function(){
+            $('#guides').DataTable();
+        })
+        </script>
     {else}
 
     {/if}

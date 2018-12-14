@@ -7,8 +7,19 @@
     <br><br>
 
     {if $trips}
-        <table class="tableList">
-            <tr><th>Nr</th><th>Nazwa</th><th>Data rozpoczęcia</th><th>Data zakończenia</th><th>Liczba uczniów</th><th>Miejscowość</th><th>Opcje</th>
+        <div class="table-responsive">
+        <table id="trips" class="table">
+            <thead>
+            <tr>
+            <th>Nr</th>
+            <th>Nazwa</th>
+            <th>Data rozpoczęcia</th>
+            <th>Data zakończenia</th>
+            <th>Liczba uczniów</th>
+            <th>Miejscowość</th>
+            <th>Opcje</th>
+            </tr>
+            </thead>
                 {assign var='i' value=1}
                 {foreach from=$trips item=v key=k}
             <tr>
@@ -29,7 +40,12 @@
             {assign var='i' value=$i+1}
             {/foreach}
         </table>
-
+        </div>
+        <script>
+        $(document).ready(function(){
+            $('#trips').DataTable();
+        })
+        </script>
     {else}
 
     {/if}
