@@ -7,14 +7,14 @@
 
 {if $link[2] == 'edit'}
     <form action="" method="post" id="edit">
-        <label class="elementLabel">Nazwisko: </label> <input name="nazwisko"  class="inputElement" type="text" required>
+        <label class="elementLabel">Nazwisko: </label> <input name="nazwisko"  class="inputElement" type="text" value="{$smarty.post.nazwisko}" required>
         <br><br>
-        <label class="elementLabel">Imię: </label> <input name="imie"  class="inputElement" type="text" required>
+        <label class="elementLabel">Imię: </label> <input name="imie"  class="inputElement" type="text" value="{$smarty.post.imie}" required>
         <br><br>
-        <label class="elementLabel">Nazwisko: </label> <input name="adres"  class="inputElement" type="text" required>
+        <label class="elementLabel">Nazwisko: </label> <input name="adres"  class="inputElement" type="text" value="{$smarty.post.adres}" required>
         <br><br>
         <label class="elementLabel">Miasto: </label>
-        <select name="city">
+        <select name="id_miejscowosci">
             <option value="0">Wybierz miejscowość...</option>
             {if $cities}
                 {foreach from=$cities key=k item=v}
@@ -23,13 +23,13 @@
             {/if}
         </select>
         <br><br>
-        <label class="elementLabel">Kod pocztowy: </label> <input name="kod_pocztowy"  class="inputElement" type="text" required>
+        <label class="elementLabel">Kod pocztowy: </label> <input name="kod_pocztowy"  class="inputElement" type="text" value="{$smarty.post.kod_pocztowy}" required>
         <br><br>
-        <label class="elementLabel">PESEL: </label> <input name="pesel"  class="inputElement" type="text" required>
+        <label class="elementLabel">PESEL: </label> <input name="pesel"  class="inputElement" type="text" value="{$smarty.post.pesel}" required>
         <br><br>
-        <label class="elementLabel">Telefon: </label> <input name="telefon"  class="inputElement" type="text" required>
+        <label class="elementLabel">Telefon: </label> <input name="telefon"  class="inputElement" type="text" value="{$smarty.post.telefon}" required>
         <br><br>
-        <label class="elementLabel">E-mail: </label> <input name="email"  class="inputElement" type="text" required>
+        <label class="elementLabel">E-mail: </label> <input name="email"  class="inputElement" type="text" value="{$smarty.post.email}" required>
         <br><br>
 
         <input type="hidden" name="action" value="edit">
@@ -51,7 +51,7 @@
         <label class="elementLabel">Nazwisko: </label> <input name="adres"  class="inputElement" type="text" required>
         <br><br>
         <label class="elementLabel">Miasto: </label>
-        <select name="city">
+        <select name="id_miejscowosci">
             <option value="0">Wybierz miejscowość...</option>
             {if $cities}
                 {foreach from=$cities key=k item=v}
