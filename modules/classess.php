@@ -1,5 +1,6 @@
 <?php
 
+if(!$_SESSION['user']) die('Nie jesteś zalogowany.');
 global $config;
 
 switch($link[2]) {
@@ -63,6 +64,54 @@ switch($link[2]) {
                 }
             }
         }
+
+        break;
+
+    case 'assign':
+
+        if($_POST['action'] == 'assign'){
+            $assigns = $_POST['assign'];
+            $assign_protectors = $_POST['assign_protectors'];
+
+            $core -> unassignClassFromTrips($link[3]);
+            foreach($assigns as $k => $v) {
+                $core->assignClassToTrip($link[3], $v);
+                }
+
+            $core -> unassignClassFromProtector($link[3]);
+            foreach($assign_protectors as $k => $v) {
+                $core->assignClassToProtector($link[3], $v);
+            }
+            $_SESSION['msg']['m1']['title'] = "Pomyślnie przypisano klasy do wycieczek oraz opiekunów.";
+            header('Location: ' . $config['url'] . 'classess/assign/'.$link[3]);
+            exit();
+        }
+
+        $checks = $core -> checkClassAssignedToTrip($link[3]);
+        $check = array();
+        foreach($checks as $k => $v){
+            array_push($check, $v['id_wycieczki']);
+        }
+
+        $checks_p = $core -> checkClassAssignedToProtector($link[3]);
+        $check_p = array();
+        foreach($checks_p as $k => $v){
+            array_push($check_p, $v['id_opiekuna']);
+        }
+        $smarty -> assign('check_protectors', $check_p);
+
+        $smarty -> assign('check', $check);
+
+        $class = $core -> getClassById($link[3]);
+        $smarty -> assign('class', $class);
+
+        $trips = $core -> getAllTrips();
+        $smarty -> assign('trips', $trips);
+
+        $protectors = $core -> getAllProtectors();
+        $smarty -> assign('protectors', $protectors);
+
+
 
         break;
 

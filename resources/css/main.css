@@ -115,3 +115,15 @@ th{
 input[type="text"] {
     width: 250px;
 }
+
+@media (min-width: 1200px) {
+    .container {
+        width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 100%;
+    }
+}

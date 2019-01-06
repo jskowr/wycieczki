@@ -6,9 +6,9 @@
 </div>
 
 <div">
-<img src="{$config.url}resources/images/trips/trip_1" width="550" height="350" />
-<img src="{$config.url}resources/images/trips/trip_2" width="550" height="350" />
+<img src="{$config.url}resources/images/trips/trip_1" width="900" height="650" />
+<img src="{$config.url}resources/images/trips/trip_2" width="900" height="650" />
     <br><br>
-<img src="{$config.url}resources/images/trips/trip_3" width="550" height="350" />
-<img src="{$config.url}resources/images/trips/trip_4" width="550" height="350" />
+<img src="{$config.url}resources/images/trips/trip_3" width="900" height="650" />
+<img src="{$config.url}resources/images/trips/trip_4" width="900" height="650" />
 </div>

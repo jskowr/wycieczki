@@ -14,12 +14,13 @@
             <ul class="nav navbar-nav" style="margin-left: auto;">
                 <li style="padding-bottom: 0px;"><a href="{$config.url}">Strona główna</a></li>
                 <li style="padding-bottom: 0px;"><a href="{$config.url}account">Konto</a></li>
-                <li style="padding-bottom: 0px;"><a href="{$config.url}classess">Klasy</a></li>
-                <li style="padding-bottom: 0px;"><a href="{$config.url}places">Miejsca</a></li>
-                <li style="padding-bottom: 0px;"><a href="{$config.url}cities">Miejscowości</a></li>
-                <li style="padding-bottom: 0px;"><a href="{$config.url}protectors">Opiekunowie</a></li>
-                <li style="padding-bottom: 0px;"><a href="{$config.url}guides">Przewodnicy</a></li>
+                {if $smarty.session.user && in_array('classess', $config.permissions.show[$smarty.session.user.role])}<li style="padding-bottom: 0px;"><a href="{$config.url}classess">Klasy</a></li>{/if}
+                {if $smarty.session.user && in_array('places', $config.permissions.show[$smarty.session.user.role])}<li style="padding-bottom: 0px;"><a href="{$config.url}places">Miejsca</a></li>{/if}
+                {if $smarty.session.user && in_array('cities', $config.permissions.show[$smarty.session.user.role])}<li style="padding-bottom: 0px;"><a href="{$config.url}cities">Miejscowości</a></li>{/if}
+                {if $smarty.session.user && in_array('protectors', $config.permissions.show[$smarty.session.user.role])}<li style="padding-bottom: 0px;"><a href="{$config.url}protectors">Opiekunowie</a></li>{/if}
+                {if $smarty.session.user && in_array('guides', $config.permissions.show[$smarty.session.user.role])}<li style="padding-bottom: 0px;"><a href="{$config.url}guides">Przewodnicy</a></li>{/if}
                 <li style="padding-bottom: 0px;"><a href="{$config.url}trips">Wycieczki</a></li>
+                {if $smarty.session.user.role=='admin'}<li style="padding-bottom: 0px;"><a href="{$config.url}admin">Panel admina</a></li>{/if}
             </ul>
         </div>
     </div>

@@ -5,7 +5,7 @@
     <div class="{if $smarty.session.msg.m1.err}err{else}ok{/if}">{$smarty.session.msg.m1.title}</div> <br><br>
 {/if}
 
-{if $link[2] == 'edit'}
+{if $link[2] == 'edit' && in_array($link.1, $config.permissions.edit[$smarty.session.user.role])}
     <form action="" method="post" id="edit">
         <label class="elementLabel">Nazwisko: </label> <input name="nazwisko"  class="inputElement" type="text" value="{$smarty.post.nazwisko}" required>
         <br><br>
@@ -35,13 +35,13 @@
         <input type="hidden" name="action" value="edit">
         <input class="submitButton" type="submit" value="Zapisz">
     </form>
-{elseif $link.2 == 'del'}
+{elseif $link.2 == 'del' && in_array($link.1, $config.permissions.edit[$smarty.session.user.role])}
     <form action="" method="POST" id="del">
         <input type="checkbox" name="confirm"> &nbsp;Potwiedź usunięcie...<br><br>
         <input type="hidden" name="action" value="del"/>
         <input type="submit" value="Usuń"/>
     </form>
-{elseif $link.2 == 'add'}
+{elseif $link.2 == 'add' && in_array($link.1, $config.permissions.edit[$smarty.session.user.role])}
     <h3>Wypełnij pola:</h3><br><br>
     <form action="" method="post" id="add">
         <label class="elementLabel">Nazwisko: </label> <input name="nazwisko"  class="inputElement" type="text" required>
@@ -73,7 +73,7 @@
         <input class="submitButton" type="submit" value="Dodaj">
     </form>
 {else}
-    <a href="{$config.url}{$link.1}/add"><div class="addElement">Dodaj przewodnika</div></a>
+{if $smarty.session.user.role == 'kierownik'}<a href="{$config.url}{$link.1}/add"><div class="addElement">Dodaj przewodnika</div></a>{/if}
     <br><br>
 
     {if $guides}
@@ -90,7 +90,7 @@
                 <th>PESEL</th>
                 <th>Telefon</th>
                 <th>E-mail</th>
-                <th>Opcje</th>
+                {if in_array($link.1, $config.permissions.edit[$smarty.session.user.role])}<th>Opcje</th>{/if}
                 </tr>
                 </thead>
                     {assign var='i' value=1}
@@ -105,13 +105,14 @@
                     <td>{$v.pesel}</td>
                     <td>{$v.telefon}</td>
                     <td>{$v.email}</td>
-                    <td>
-                        <a href="{$config.url}{$link.1}/edit/{$v.id}" title="edytuj"><img
-                                    src="{$config.url}resources/images/edit.png" alt="edytuj"/></a>
+                    {if in_array($link.1, $config.permissions.edit[$smarty.session.user.role])}<td>
+                        {if $smarty.session.user.role == 'kierownik'} <a href="{$config.url}{$link.1}/edit/{$v.id}" title="edytuj"><img
+                                    src="{$config.url}resources/images/edit.png" alt="edytuj"/></a> {/if}
                         &nbsp;
-                        <a href="{$config.url}{$link.1}/del/{$v.id}" title="usuń"><img
-                                    src="{$config.url}resources/images/remove.png" alt="usuń"/></a>
+                        {if $smarty.session.user.role == 'kierownik'}  <a href="{$config.url}{$link.1}/del/{$v.id}" title="usuń"><img
+                                    src="{$config.url}resources/images/remove.png" alt="usuń"/></a> {/if}
                     </td>
+                    {/if}
                 </tr>
                 {assign var='i' value=$i+1}
                 {/foreach}

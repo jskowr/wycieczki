@@ -18,6 +18,32 @@ switch($link[2]) {
 
         break;
 
+    case 'edit':
+
+        $protector = $core->getProtectorById($link[3]);
+
+        if($_POST['action'] == 'edit'){
+            if($core -> updateProtector($link[3], $_POST['nazwisko'], $_POST['imie'], $_POST['adres'], $_POST['kod_pocztowy'],$_POST['pesel'],$_POST['telefon'],$_POST['email'], $_POST['id_miejscowosci'])) {
+                $_SESSION['msg']['m1']['title'] = "Pomyślnie edytowano dane opiekuna.";
+                header('Location: ' .$config['url'] . 'protectors');
+                exit();
+            }else{
+                header('Location: ' .$config['url'] . 'protectors/edit/'.$link[3]);
+                exit();
+            }
+        }
+
+        $cities = $core -> getAllCities();
+        $smarty -> assign('cities', $cities);
+
+        if (!$_POST['edit']) {
+            foreach ($protector as $k => $v) {
+                $_POST[$k] = $v;
+            }
+        }
+
+        break;
+
     case 'del':
         if($_POST['action'] == 'del'){
             if($_POST['confirm']){
