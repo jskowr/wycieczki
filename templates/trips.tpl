@@ -119,6 +119,7 @@
         <input class="submitButton" style="width: 200px !important; height: 50px !important; font-size: 30px; !important;" type="submit" value="Przypisz">
     </form>
     <br>
+{elseif $link.2 == 'generate' && in_array($link.1, $config.permissions.edit[$smarty.session.user.role])}
 
 {else}
     {if $smarty.session.user.role == 'kierownik'}<a href="{$config.url}{$link.1}/add"><div class="addElement">Dodaj wycieczkę</div></a>{/if}
@@ -155,7 +156,9 @@
                                 src="{$config.url}resources/images/remove.png" alt="usuń"/></a> {/if}
                     &nbsp;
                     {if $smarty.session.user.role == 'kierownik'}  <a href="{$config.url}{$link.1}/assign/{$v.id}" title="przypisz"><img
-                                src="{$config.url}resources/images/assign.png" alt="przypisz"/></a> {/if}
+                                src="{$config.url}resources/images/assign.png" alt="przypisz"/></a> {/if} &nbsp;
+                    {if $smarty.session.user.role == 'kierownik'}  <a href="{$config.url}{$link.1}/generate/{$v.id}" title="generuj raport"><img
+                                src="{$config.url}resources/images/pdf.png" alt="generuj raport"/></a> {/if}
                 </td>
                 {/if}
             </tr>

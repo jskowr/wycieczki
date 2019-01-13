@@ -350,6 +350,62 @@ class Core
         }
     }
 
+    function checkTripAssignedToClass($trip){
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`klasy_wycieczki`
+				WHERE `id_wycieczki` = :id	
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $trip, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
+    function checkProtectorsAssignedToClass($class){
+        try {
+
+            $sql = "
+				SELECT
+					*
+				FROM
+					`opiekunowie_klas`
+				WHERE `id_klasy` = :id	
+				";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', $class, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $retval[$result['id']] = $result;
+
+            }
+            $stmt->closeCursor();
+
+            return $retval;
+
+        } catch (PDOException $e) {
+            DEBUG ? die('SQL Error: ' . $e->getMessage()) : die('System tymczasowo niedostepny. Zapraszamy pozniej.');
+        }
+    }
+
     function checkGuideAssignedToTrip($trip){
         try {
 
@@ -1245,6 +1301,66 @@ class Core
         }
     }
 
+    #raport
+
+    function getReportPdf($trip_data, $trip_classes, $trip_guides, $classes_protectors)
+    {
+        global $config;
+        global $mpdf;
+
+        $city = $this -> getCityById($trip_data['id_miejscowosci']);
+
+        $html = '';
+        $html .= '<html><body>';
+
+        $html .= '<h2 style="text-align: center;">Raport podsumowujący wycieczkę o ID: '.$trip_data['id'].'</h2>';
+        //$html.='<div style="height: 50px;"></div>';
+        $html.='<div style="height: 2px; margin-top: 30px; margin-bottom: 30px; background-color: #3c3c3c;"></div>';
+        $html .= '<h3 style="text-align: center;">Podstawowe dane o wycieczce</h3>';
+        $html.='<div style="height: 30px;"></div>';
+        $html .= '<span style="font-weight: bold; white-space: nowrap;">Nazwa: </span><span style="color: #2a6496;">'.$trip_data['nazwa'].'</span>';
+        $html.='<div style="height: 10px;"></div>';
+        $html .= '<span style="font-weight: bold; white-space: nowrap;">Data rozpoczęcia: </span> <span style="color: #2a6496;">'.$trip_data['data_rozpoczecia'].'</span>';
+        $html.='<div style="height: 10px;"></div>';
+        $html .= '<span style="font-weight: bold; white-space: nowrap;">Data zakończenia: </span> <span style="color: #2a6496;">'.$trip_data['data_zakonczenia'].'</span>';
+        $html.='<div style="height: 10px;"></div>';
+        $html .= '<span style="font-weight: bold; white-space: nowrap;">Liczba uczniów: </span> <span style="color: #2a6496;">'.$trip_data['liczba_uczniow'].'</span>';
+        $html.='<div style="height: 10px;"></div>';
+        $html .= '<span style="font-weight: bold; white-space: nowrap;">Miejscowość: </span> <span style="color: #2a6496;">'.$city['nazwa'].'</span>';
+        $html.='<div style="height: 2px; margin-top: 30px; margin-bottom: 30px; background-color: #3c3c3c;"></div>';
+
+        //klasy
+        $html .= '<span style="font-weight: bold;">Klasy uczestniczące w wycieczce:</span></br></br>';
+        $html.='<div style="height: 20px;"></div>';
+        foreach($trip_classes as $k => $v){
+            $html.='<div style="height: 10px;"></div>';
+            $html .= '<span style="color: #2a6496;">'.$v['symbol'].'</span></br></br>';
+            $html.='<div style="height: 10px;"></div>';
+            $html.='Opiekunowie: </br>';
+            $pr = $classes_protectors[$v['id']];
+            foreach($pr as $k2 => $v2){
+                $p = $this -> getProtectorById($v2);
+                $html.= $p['imie'].' '.$p['nazwisko'].', telefon - '.$p['telefon'];
+                $html.='<div style="height: 10px;"></div>';
+            }
+            $html.='<div style="height: 1px; margin-top: 5px; margin-bottom: 5px; background-color: #00dd1c;"></div>';
+        }
+        $html.='<div style="height: 2px; margin-top: 30px; margin-bottom: 30px; background-color: #3c3c3c;"></div>';
+        $html .= '<span style="font-weight: bold;">Przewodnicy wycieczki:</span></br></br>';
+        $html.='<div style="height: 20px;"></div>';
+
+        foreach($trip_guides as $k => $v){
+            $gu = $this -> getGuideById($v);
+            $html.= $gu['imie'].' '.$gu['nazwisko'].', telefon - '.$gu['telefon'];
+            $html.='<div style="height: 20px;"></div>';
+        }
+
+        $html .= '</body></html>';
+
+        $mpdf->WriteHTML($html, 2);
+
+        $mpdf->Output('wycieczka_'.$trip_data['id'].'.pdf', 'D');
+    }
 
 
 }

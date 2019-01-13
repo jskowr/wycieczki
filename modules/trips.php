@@ -95,6 +95,37 @@ switch($link[2]) {
 
         break;
 
+    case 'generate':
+
+        $trip_data = $core -> getTripById($link[3]);
+        $trip_c = $core -> checkTripAssignedToClass($trip_data['id']);
+        $trip_classes = array();
+        foreach($trip_c as $k => $v){
+            $c = $core -> getClassById($v['id_klasy']);
+            $trip_classes[] = $c;
+        }
+        $trip_g = $core -> checkGuideAssignedToTrip($trip_data['id']);
+        $trip_guides = array();
+        foreach($trip_g as $k => $v){
+            $g = $core -> getGuideById($v['id_przewodnika']);
+            $trip_guides[] = $g;
+        }
+
+        $classes_protectors = array();
+
+        foreach($trip_classes as $k => $v){
+            $pr = $core -> checkProtectorsAssignedToClass($v['id']);
+            foreach($pr as $k2 => $v2) {
+                $classes_protectors[$v['id']][] = $v2['id_opiekuna'];
+            }
+        }
+
+        $core -> getReportPdf($trip_data, $trip_classes, $trip_guides, $classes_protectors);
+
+        header('Location: ' . $config['url'] . 'trips');
+
+        break;
+
     default:
         $trips = $core->getAllTrips();
         $smarty->assign('trips', $trips);

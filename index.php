@@ -6,6 +6,9 @@ define('DEBUG', true);
 include('config/database.php');
 include('config/config.php');
 include('class/class.core.php');
+include('libs/mpdf/vendor/autoload.php');
+
+$mpdf = new \Mpdf\Mpdf();
 
 $core = new Core();
 $core->dbConnect();
